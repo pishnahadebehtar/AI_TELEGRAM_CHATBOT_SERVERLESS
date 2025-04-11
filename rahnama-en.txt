@@ -1,0 +1,458 @@
+What You’ll Build
+Your chatbot will:
+Use Appwrite Cloud to store data (like user info and chat history) and run the code that makes it work.
+
+Use OpenRouter to generate smart replies (it’s free!).
+
+Work on Telegram, so people can message it like a friend.
+
+You’ll store your project’s code on GitHub (don’t worry, I’ll explain what that is), and you’ll use a file called main.js (which you already have) to power the chatbot.
+Before You Start (Prerequisites)
+You don’t need much to begin, just:
+A computer with an internet connection.
+
+A web browser (like Google Chrome, Firefox, or Safari).
+
+A phone or computer with Telegram installed (you can download it from telegram.org if you don’t have it).
+
+An email address to sign up for accounts.
+
+That’s it! Let’s get started.
+Step 1: Sign Up for Appwrite Cloud
+Appwrite Cloud is a free service that acts like the “brain” of your chatbot. It stores data and runs your code.
+Open Your Browser: Open a web browser on your computer.
+
+Go to Appwrite: Type this into the address bar and press Enter: https://appwrite.io/.
+
+Sign Up: Look at the top-right corner of the page. You’ll see a Sign Up button. Click it.
+
+Choose How to Sign Up:
+You can click Sign up with Google and use a Google account, or
+
+Click Sign up with Email, then fill in your email and a password.
+
+Finish Signing Up: Follow the steps on the screen (like entering your name). If you used an email, check your inbox for a verification link and click it.
+
+Log In: Once your account is ready, go back to https://appwrite.io/, click Log In, and enter your email/password or Google account details.
+
+You’re now in the Appwrite dashboard! This is where you’ll manage your chatbot.
+Step 2: Create a Project in Appwrite Cloud
+A “project” is like a workspace for your chatbot in Appwrite.
+Find the Dashboard: After logging in, you’ll see a screen with a big Create Project button in the middle.
+
+Click Create Project: Click that button.
+
+Name Your Project: A small window will pop up. In the box that says “Project Name,” type something simple like MyChatbot. Then click the blue Create button at the bottom of the window.
+
+Wait a Second: Appwrite will set up your project. When it’s done, you’ll see a new screen with your project name at the top.
+
+You now have a project! This is where all your chatbot stuff will live.
+Step 3: Set Up the Database in Appwrite
+Your chatbot needs a place to store information, like who’s chatting with it and what they’ve said. In Appwrite, this place is called a database, and inside the database, you’ll create collections (think of them as folders). You need three collections: Users, Sessions, and Chats. I’ll walk you through making each one exactly how your code needs them.
+3.1 Create the "Users" Collection
+This collection will store info about people who use your chatbot.
+Go to Database: On the left side of your Appwrite project screen, click the Database icon (it looks like a little filing cabinet).
+
+Add a Collection: At the top of the Database page, click the Add Collection button (it’s orange).
+
+Name It: In the “Name” box, type Users (capital “U”). Then click the blue Create button.
+
+Add Attributes: Now you’re inside the “Users” collection. You need to tell Appwrite what kind of info to store here by adding “attributes” (like columns in a table). Click Add Attribute (orange button at the top).
+Attribute 1: telegramId
+Type: Click the dropdown and pick String (this is for text).
+
+Key: Type telegramId (all lowercase).
+
+Size: Type 255 (this means it can hold up to 255 characters).
+
+Required: Check the box next to “Required” (this means every user must have this).
+
+Click the blue Create button.
+
+Attribute 2: username
+Type: Pick String again.
+
+Key: Type username (all lowercase).
+
+Size: Type 255.
+
+Required: Leave this unchecked (not every user will have a username).
+
+Click Create.
+
+Attribute 3: createdAt
+Type: Pick DateTime (this is for dates and times).
+
+Key: Type createdAt (lowercase “c”, then “A”, then “t”).
+
+Required: Check the “Required” box.
+
+Click Create.
+
+Check Your Work: You should see three attributes listed: telegramId, username, and createdAt. If you made a mistake, click the trash can icon next to an attribute to delete it and try again.
+
+3.2 Create the "Sessions" Collection
+This collection keeps track of active chats.
+Go Back: Click Collections at the top of the Database page (it’s like a breadcrumb trail).
+
+Add Another Collection: Click Add Collection again.
+
+Name It: Type Sessions (capital “S”) and click Create.
+
+Add Attributes: Click Add Attribute inside the “Sessions” collection.
+Attribute 1: userId
+Type: Pick String.
+
+Key: Type userId (lowercase “u”, then “I”, then “d”).
+
+Size: Type 255.
+
+Required: Check “Required”.
+
+Click Create.
+
+Attribute 2: active
+Type: Pick Boolean (this is for true/false values).
+
+Key: Type active (all lowercase).
+
+Default Value: Type true (lowercase).
+
+Required: Check “Required”.
+
+Click Create.
+
+Attribute 3: createdAt
+Type: Pick DateTime.
+
+Key: Type createdAt.
+
+Required: Check “Required”.
+
+Click Create.
+
+Check: You should see userId, active, and createdAt.
+
+3.3 Create the "Chats" Collection
+This collection stores the messages between users and the chatbot.
+Go Back: Click Collections at the top.
+
+Add Collection: Click Add Collection.
+
+Name It: Type Chats (capital “C”) and click Create.
+
+Add Attributes: Click Add Attribute.
+Attribute 1: sessionId
+Type: Pick String.
+
+Key: Type sessionId (lowercase “s”, then “I”, then “d”).
+
+Size: Type 255.
+
+Required: Check “Required”.
+
+Click Create.
+
+Attribute 2: userId
+Type: Pick String.
+
+Key: Type userId.
+
+Size: Type 255.
+
+Required: Check “Required”.
+
+Click Create.
+
+Attribute 3: role
+Type: Pick String.
+
+Key: Type role (all lowercase).
+
+Size: Type 255.
+
+Required: Check “Required”.
+
+Click Create.
+
+Attribute 4: content
+Type: Pick String.
+
+Key: Type content (all lowercase).
+
+Size: Type 10000 (this lets it hold long messages).
+
+Required: Check “Required”.
+
+Click Create.
+
+Attribute 5: createdAt
+Type: Pick DateTime.
+
+Key: Type createdAt.
+
+Required: Check “Required”.
+
+Click Create.
+
+Check: You should see sessionId, userId, role, content, and createdAt.
+
+3.4 Save Your Collection IDs
+Each collection has a special ID (like a serial number) that your code needs later.
+Go to Collections: In the Database section, you’ll see your three collections listed: Users, Sessions, and Chats.
+
+Get the IDs:
+Click on Users.
+
+Look at the top of the page. You’ll see “Collection ID” followed by a long string (e.g., 67f64d80000eb41830cf). Copy this string and paste it somewhere safe (like a text file on your computer). Label it “Users Collection ID”.
+
+Go back to Collections, click Sessions, and copy its Collection ID. Label it “Sessions Collection ID”.
+
+Do the same for Chats and label it “Chats Collection ID”.
+
+Keep Them Safe: You’ll need these IDs later, so don’t lose them!
+
+Step 4: Set Up OpenRouter
+OpenRouter is a free service that gives your chatbot the ability to “think” and reply with smart answers.
+Go to OpenRouter: Open your browser and type https://openrouter.ai/ in the address bar, then press Enter.
+
+Sign Up: Click Sign Up at the top-right corner.
+
+Choose a Method: Sign up with your Google account or use an email and password (just like Appwrite).
+
+Verify: If you used an email, check your inbox for a verification link and click it.
+
+Log In: Go back to https://openrouter.ai/, click Log In, and enter your details.
+
+Get an API Key:
+On the left side, click Keys (it might look like a little key icon).
+
+Click the Create Key button.
+
+In the “Name” box, type something like ChatbotKey.
+
+Click Generate.
+
+You’ll see a long string starting with sk-or- (e.g., sk-or-abc123xyz). Copy this and paste it into your text file. Label it “OpenRouter API Key”.
+
+Step 5: Create a Telegram Bot
+Telegram is where people will talk to your chatbot. You’ll create a bot using a special Telegram account called BotFather.
+Open Telegram: Use the Telegram app on your phone or go to https://web.telegram.org/ in your browser.
+
+Sign In: Log in with your phone number if you haven’t already (Telegram will send you a code to verify).
+
+Find BotFather: In the search bar at the top, type BotFather and press Enter. You’ll see an account with a blue checkmark. Click it to start a chat.
+
+Start the Chat: Type /start and press Enter (or click the Start button if you’re on the app).
+
+Make a New Bot:
+Type /newbot and press Enter.
+
+BotFather will ask for a name. Type something like MyCoolChatbot and press Enter.
+
+Next, it’ll ask for a username. Type something ending with “Bot”, like MyCoolChatbotBot, and press Enter. (Usernames must be unique, so if it’s taken, try adding numbers, e.g., MyCoolChatbotBot123.)
+
+Get the Token: BotFather will reply with a message saying “Done!” and give you a token. It looks like this: 123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11. Copy the whole thing and paste it into your text file. Label it “Telegram Bot Token”.
+
+Test It: In Telegram, search for your bot’s username (e.g., @MyCoolChatbotBot) and click Start. It won’t reply yet, but this confirms it exists!
+
+Step 6: Set Up GitHub
+GitHub is a website where people store and share code. Think of it as a big online folder for your project. Don’t worry if this sounds confusing—I’ll guide you through it.
+Go to GitHub: Open your browser and type https://github.com/ in the address bar, then press Enter.
+
+Sign Up: Click Sign Up at the top-right corner.
+
+Fill in Details:
+Pick a username (e.g., YourName123).
+
+Enter your email and a password.
+
+Solve the little puzzle they give you to prove you’re not a robot.
+
+Click Create account.
+
+Verify: Check your email for a code from GitHub, enter it on the screen, and follow any extra steps (like picking a free plan).
+
+Log In: Go back to https://github.com/, click Sign In, and use your new username and password.
+
+Create a Repository:
+At the top-right corner, click the + button and choose New repository.
+
+In the “Repository name” box, type something like my-chatbot.
+
+Under “Public or Private,” pick Public (this means anyone can see it).
+
+Check the box that says Add a README file (this adds a basic info page).
+
+Click the green Create repository button at the bottom.
+
+Understand What You Did: You now have a “repository” (a fancy word for a project folder) on GitHub. This is where your chatbot’s code will live.
+
+Step 7: Create a Serverless Function in Appwrite Cloud
+A “serverless function” is the code that makes your chatbot work. It runs on Appwrite Cloud and connects everything together. Here’s how to set it up.
+7.1 Start a New Function
+Go to Functions: In your Appwrite project dashboard (the one named MyChatbot), look at the left sidebar. Click Functions (it looks like a little rocket or code symbol).
+
+Create a Function: Click the orange Create Function button at the top.
+
+Fill in Details:
+Name: Type ChatbotFunction in the “Name” box.
+
+Runtime: Click the dropdown next to “Runtime” and pick Node.js 18 (or the latest Node.js version available).
+
+Click the blue Next button.
+
+Connect to GitHub:
+On the next screen, under “Deployment Source,” pick GitHub.
+
+Click Connect GitHub. A pop-up will ask you to log in to GitHub. Use your GitHub username and password.
+
+After logging in, GitHub will ask if Appwrite can access your repositories. Click Authorize Appwrite.
+
+Back in Appwrite, under “Repository,” click the dropdown and pick your repository (e.g., my-chatbot).
+
+Click the blue Create button.
+
+7.2 Add Your Code
+Your chatbot needs a file called main.js (which you already have) to work. Let’s add it to GitHub.
+Go to Your Repository: In your browser, go to your GitHub repository. The address will be something like https://github.com/YourName123/my-chatbot. Replace YourName123 with your username.
+
+Add a File:
+Click the Add file button (near the top-right).
+
+Choose Create new file from the dropdown.
+
+Name the File: In the “Name your file” box at the top, type src/main.js. (The src/ part creates a folder called “src” and puts “main.js” inside it.)
+
+Add the Code: You already have the main.js code. Paste it into the big text box on the screen.
+
+Save It:
+Scroll to the bottom.
+
+In the “Commit new file” section, leave the default message (“Create src/main.js”).
+
+Click the green Commit new file button.
+
+Wait: Appwrite will notice this new file and start setting up your function. This might take a minute.
+
+7.3 Set Environment Variables
+Your function needs some settings (called “environment variables”) to connect to Appwrite, OpenRouter, and Telegram.
+Go to Your Function: In Appwrite, click Functions on the left, then click your function (ChatbotFunction).
+
+Open Settings: Click the Settings tab at the top.
+
+Find Variables: Scroll down to the “Variables” section.
+
+Add These Variables: For each one, click Add Variable, fill in the “Key” and “Value,” and click Save. Here’s the list:
+Key: APPWRITE_ENDPOINT | Value: https://cloud.appwrite.io/v1 (type this exactly).
+
+Key: APPWRITE_PROJECT_ID | Value: Go to your project’s main dashboard (click Home on the left). At the top, copy the “Project ID” (e.g., 67f6ead918e72f1f30f4) and paste it here.
+
+Key: APPWRITE_API_KEY | Value:
+Go to Settings on the left sidebar (the gear icon).
+
+Click API Keys > Add API Key.
+
+Name it ChatbotKey.
+
+Under “Scopes,” check databases.read, databases.write, and functions.read.
+
+Click Generate, then copy the key (e.g., abc123xyz...) and paste it here.
+
+Key: OPENROUTER_API_KEY | Value: Paste your OpenRouter API Key from your text file.
+
+Key: TELEGRAM_TOKEN | Value: Paste your Telegram Bot Token from your text file.
+
+Key: USERS_COLLECTION_ID | Value: Paste the Users Collection ID from your text file.
+
+Key: SESSIONS_COLLECTION_ID | Value: Paste the Sessions Collection ID from your text file.
+
+Key: CHATS_COLLECTION_ID | Value: Paste the Chats Collection ID from your text file.
+
+Save Everything: Click the Update button at the bottom of the Settings page.
+
+Step 8: Connect Telegram to Your Function
+Telegram needs to know where your chatbot lives so it can send messages to it. This is called setting a “webhook.”
+Get Your Function URL: In Appwrite, go to Functions, click ChatbotFunction, and click the Settings tab. Scroll down to “Function Domain” and copy the URL (e.g., https://67f6ead918e72f1f30f4.appwrite.global).
+
+Set the Webhook:
+Open a new browser tab.
+
+In the address bar, paste this exact URL, but replace the parts in < > with your info:
+
+https://api.telegram.org/bot<YourBotToken>/setWebhook?url=<YourFunctionURL>
+
+Replace <YourBotToken> with your Telegram Bot Token (e.g., 123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11).
+
+Replace <YourFunctionURL> with your Function Domain (e.g., https://67f6ead918e72f1f30f4.appwrite.global).
+
+Example: https://api.telegram.org/bot123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11/setWebhook?url=https://67f6ead918e72f1f30f4.appwrite.global
+
+Press Enter.
+
+Check the Result: Your browser should show something like:
+
+{"ok":true,"result":true,"description":"Webhook was set"}
+
+If you see an error, double-check your token and URL.
+
+Step 9: Test Your Chatbot
+Open Telegram: Go back to Telegram and find your bot (e.g., @MyCoolChatbotBot).
+
+Send a Message: Type /start or just say “Hi” and press Enter.
+
+Wait: Your bot should reply! If it doesn’t:
+Go to Appwrite > Functions > ChatbotFunction > Executions tab.
+
+Look for errors (like “Missing variable”) and fix your environment variables if needed.
+
+Step 10: Share Your Project on GitHub
+Since this is open-source, let’s make your GitHub repository look nice and shareable.
+Make It Public:
+Go to your GitHub repository (e.g., https://github.com/YourName123/my-chatbot).
+
+Click Settings at the top.
+
+Scroll to the bottom to “Danger Zone.”
+
+Click Make public and confirm.
+
+Add a License:
+Click Add file > Create new file.
+
+Name it LICENSE (all caps).
+
+Paste this text:
+
+MIT License
+
+Copyright (c) 2023 YourName
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software...
+
+(Get the full text from https://opensource.org/licenses/MIT. Replace 2023 with the current year and YourName with your name.)
+
+Click Commit new file.
+
+Update README:
+Click README.md in your repository.
+
+Click the pencil icon to edit.
+
+Replace its contents with:
+
+# My Chatbot
+
+This is a free chatbot built with Appwrite Cloud, OpenRouter, and Telegram.
+
+## How to Use
+Follow the guide to set it up yourself!
+
+## License
+MIT License
+
+Click Commit changes.
+
+You’re Done!
+Congratulations! You’ve built a chatbot from scratch. It’s running on Appwrite Cloud, chatting on Telegram, and shared on GitHub. If something doesn’t work, double-check your steps or ask for help on the Appwrite Discord. Have fun with your new chatbot!
+
